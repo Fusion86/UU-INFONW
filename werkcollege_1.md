@@ -22,7 +22,7 @@
 
 1. Example number: 5308
    1. 4
-   1. 4
+   1. 10
    1. apples, i have 4 apples
 
 --- skip ---
@@ -32,7 +32,7 @@
 1. 0b0110 0101
 2. 5
 3. 209.70
-4. 14.2211
+4. ~~14.2211~~
    Decimal is smaller to represent?
 5. 0x398
 6. 61440+2048+32+14 = 63534
@@ -66,4 +66,4 @@
 
 # 8. Digital Arithmetics – Fractional Representations
 
-1. 0b 1010 0001 1100 0000 . 1101 0011 0011 0011
+1. ~~0b 1010 0001 1100 0000 . 1101 0011 0011 0011~~
