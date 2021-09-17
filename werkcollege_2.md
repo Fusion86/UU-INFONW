@@ -20,9 +20,9 @@ Assuming no file headers and stuff for simplicity.
 3. video: `720 * 576 * 3 * 25 * 20 / 1000` = 622 080 KB
    audio: `96 000 * 20 / 8 / 1000` = 240 KB
    total: 622 320 KB
-4. `100 * 100 * 100 * (16/8)` = 2 000 000 KB
+4. `100 * 100 * 100 * (16/8)` = 2 000 KB
 
-Order large to small: 4 3 1 2
+Order large to small: 3 1 2 4
 
 These size do not match up with 'familiar' file formats because we use compression almost everywhere.
 
@@ -41,3 +41,20 @@ dynamic ram is cheaper and slower, it uses capacitors to store data. these capac
 ## Memory Organisation & Types
 
 1. 1 byte and 16 in one line?
+
+-- TODO: Ask what the difference is between segmentation and paging, and whether they are used together? --
+
+## Memory – Segmentation
+
+1. For protection?
+2. Code, Data
+3. total memory size: 1 GB
+   remaining bit: segment register to select which table, global or local???
+   selector: segment description table selector
+   local address: the address of the virtual memory (which is added to the `segmentTable[selector]` address)
+   how big physical: `2^24 / 1024 / 1024` = 24 MB?
+   how big segment: `2^16 / 1024` = 64 KB?
+
+## Memory - Paging
+
+1. 
