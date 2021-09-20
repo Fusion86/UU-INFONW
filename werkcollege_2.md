@@ -47,7 +47,7 @@ dynamic ram is cheaper and slower, it uses capacitors to store data. these capac
 ## Memory – Segmentation
 
 1. For protection?
-2. Code, Data
+2. Code, Data, Stack
 3. total memory size: 1 GB
    remaining bit: segment register to select which table, global or local???
    selector: segment description table selector
