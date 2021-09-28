@@ -1,6 +1,6 @@
 # UU-INFONW
 
-...
+My notes and stuff for this course. Bla bla not responsible for any errors etc etc. (Though please do point out any errors)
 
 ## Cool links
 
