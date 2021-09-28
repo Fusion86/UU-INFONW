@@ -2,6 +2,28 @@
 
 Whenever a course note is inserted it means that it is copied 1:1 from the worksheet without fact/logic checking etc. I intend to replace all these parts with human-speak.
 
+## TODO
+
+- Something about soft/hard interrupts
+- Some more stuff about virtual memory
+- Explain segmentation vs paging
+- Multi-threading, multi-processing and multi-tasking
+- Instruction fetching, decoding, executing etc
+- IO, DMA, blocking, buffering
+- IPC (pipes, signals, semaphores, sockets, etc)
+
+## Things you need to know but aren't included in these notes
+
+- Binary/hex counting, arithmetic (incl carry flags), conversion
+- Fixed and floating point numbers
+- Von Neumann architecture
+- Arrays, queues and stacks (data structures)
+- What is an operating system and kernel
+- User mode and kernel mode
+- Software compilation (e.g. high level languages and native languages)
+- System calls
+- File systems
+
 ## Bus Interconnection
 
 Keep in mind that (unless noted otherwise) all answers are in **B**ytes per second (big B) and not **b**its per seconds (small b).
@@ -40,6 +62,19 @@ bits * freq / 1000 / 1000 = 532 # MBps
 **Course note**
 
 Comment ‘real throughput’: it orients itself on the lowest-width bus line (i.e. data or address). If both widths are the same, then this is no problem. If the data bus is smaller, we can transmit less information at each clock – even if the address bus is very large. If the address bus was smaller (e.g. we operate with 64-bit addresses while the address bus is only 32-bit wide), we need 2 bus clocks to transmit 1 address, so we only can transmit 1 data item over the data bus back to the requesting component for every 2 clocks of the bus (→ we need a whole 64-bit address to retrieve the data). Thus, in that case, the bandwidth is limited by the address bus width, not the data bus width. This definition does go against manufacturer claims, which are basing their bandwidth numbers on the data bus exclusively (to advertise greater speeds). They omit the fact that their device/components would not receive addresses at the same speed, which ‘starves’ the bus transmission. This can obviously also go vice-versa: the address bus is very wide, the data bus is smaller, hence data transmission is crippled by the data bus, but business people are advertising transmission speed with the address bus.
+
+## Memory - Types
+
+RAM = random access memory (aka not required to access sequential)
+
+Cache is SRAM (static ram). This means that it uses flipflops which are faster than the alternatives, but also more expensive.
+
+Main memory ('normal' RAM) is DRAM. This means that it uses capacitors to store data, which is cheaper but also slower. Additionally you need to continuously refresh your DRAM, because the capacitors would otherwise lose their charge/data.
+
+All RAM in computers is volatile, which means that they lose their data when not powered.
+
+There's also read-only memory (ROM), which does not lose it's data when powered off. (You don't need to know more than this, probably.)
+Your BIOS code is stored in ROM (or EPROM but you don't need to know that).
 
 ## Memory – Segmentation
 
