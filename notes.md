@@ -27,7 +27,7 @@ tp = 12.4 * 1000 * 1000 * 1000 # 12.4 GBps throughput
 tp / 8 / 1000 / 1000 = 1550 # 1500 MHz
 ```
 
-## What is the throughput of a 32 bit databus and a 64 bit address bus operating at 133 MHz?
+### What is the throughput of a 32 bit databus and a 64 bit address bus operating at 133 MHz?
 
 ```python
 bus_size = min(32, 64) # See notes
@@ -43,13 +43,13 @@ Comment ‘real throughput’: it orients itself on the lowest-width bus line (i
 
 ## Memory – Segmentation
 
-## Which segments do we have?
+### Which segments do we have?
 
 - Code (instruction segment)
 - Data segment
 - Stack segment
 
-## Why do we segment the memory?
+### Why do we segment the memory?
 
 When multi threading all threads share the same code and data stack. Each thread has its own stack segment.
 
@@ -58,8 +58,6 @@ When multi threading all threads share the same code and data stack. Each thread
 data protection; allow multiple programs to run in an alternating fashion by sharing
 instruction segments → one program runs at a time, so only one code segment needs to be
 active.
-
-## Using segment descriptors
 
 ### What is the total memory size addressable with a 30 bit virtual address?
 
@@ -138,3 +136,176 @@ Page table directory: a list of all available pages in the system, together with
 - send operation / command signals to the execution components (e.g. ALU)
 - access external bus
 - request & retrieve memory information;
+
+### What's the purpose of the process/compute unit?
+
+**Course note**
+
+- compute logical & arithmetic operations
+- hold data in local registers
+- provide data for calculation
+- control special registers
+- store & evaluate calculation events
+- manage the stack pointer
+
+### You probably need to know this image
+
+![CPU structure](assets/cpu_structure.png)
+
+### Beep boop
+
+- 32-bit architecture
+- 32-bit ALU's
+- Running at 3154 MHz
+- Memory clock of 166 MHz
+
+#### What is the width of the address bus?
+
+32 bit
+
+#### What is the size of the address registers, and which registers are considered address registers?
+
+32 bit. Instruction pointer and HL register.
+
+#### What is the size of a full data register (e.g. Ax, Bx, ACT)?
+
+32 bit
+
+#### Each register is split into a high and low segment. What is the size of each segment?
+
+16 bit
+
+#### What is the minimum width of the (internal) data bus for this architecture?
+
+16 bit, though I don't know why.
+
+#### Can this architecture process double-precision floating-point instructions?
+
+**Course note**
+
+yes – then, 2 data registers (e.g. Ax and Bx) need to be logically fused. That means the low integer portion (e.g. Bx) is computed first with the 2nd operant’s low integer. The carry- and overflow bits are preserved and used as input for the high-integer operation (e.g. with Ax). It takes then multiple clock ticks to achieve it – but is possible.
+
+#### Assuming the instruction register and decoder are both 16 bit wide, how many instructions can this provide?
+
+```python
+2 ^ 16 = 65536
+```
+
+Note: this conveniently leaves out instructions which use immediate values (e.g. `mov r0, #3`). I guess we won't have to know about this then.
+
+#### Why do we need an address buffer? Re-consider the address width for techniques such as memory paging and segmentation.
+
+The raw memory address (32 bit) still needs to be fused with the paging and segmentation bits to transmit the virtual address.
+
+// TODO: Add example?
+
+#### What is the purpose of the internal clock of the sequencer?
+
+**Course note**
+
+Provide the base frequency of the processing; it paces the instruction flow and the bus transmission; it provide a time step and – in combination with the frequency – a highprecision time;
+
+#### How can the higher clocked CPU communicate with the lower clocked memory?
+
+When the CPU requests something from the memory bus it will have to also add some wait cycles, while it waits for the memory bus to actually tick.
+To align the clock frequencies the internal sequencer clock speed is integer matched to the frequency. In this case the multiplier is 19.
+
+```python
+cpu_clock_mhz = 3154
+mem_clock_mhz = 166
+
+cpu_clock_mhz / mem_clock_mhz = 19 # The multiplier
+```
+
+The course also states that it is a good idea to request all needed data from RAM at once, so that it can be loaded into the cache. Any latter access will then hit the cache, and this be faster.
+
+#### Does the pre-described architecture have any influence on the size of the flag register ? What is the purpose of the flag register ?
+
+**Course note**
+Purpose: The flags stores control and signal information to interpret computation results and initiate interrupts. The size of the flag register is only influenced by the output signals of the adder / ALU / FPU, as well as the flags required for interrupts. Impact: The architecture does have an influence on the flag registers. The number of flags stored or (compound) arithmetic or logical operations can vary, depending on the processor. For evaluation purposes, it’s matched to the next full-byte bit width.
+
+## Memory & Caching – Access Performance
+
+### Cache layout
+
+![Cache layout](assets/cache_layout.png)
+
+### Memory hierarchy
+
+![Memory hierarchy](assets/memory_hierarchy.png)
+
+### Cache -> Memory Synchronization
+
+#### Write through
+
+Data is written simultaneously on cache and memory. This is rather slow because each write writes to both the cache and memory, and thus acts as if the cache wouldn't even be there. Memory reads only access the cache, and thus faster than when not using caching.
+
+#### Write-back
+
+Uses a dirty bit. When this element goes out of cache and the dirty bit is set, then it will be written back to the memory. If the dirty bit is not set then nothing happens (as the memory is still up-to-date).
+
+#### Posted write
+
+Update cycles controlled by memory controller, executed when memory bus is free.
+
+### Beep boop
+
+Lets assume the following:
+
+- CPU clock = 1 GHz
+- Mem clock = 100 MHz
+- L1 cache access time = 1 tick
+
+#### What is the access time of the L1 cache?
+
+1 tick, so with a 1GHz CPU clock this would be 1 ns.
+
+#### Given that memory access is split between 4 CPU ticks and 6 RAM ticks. What is the total time access time for 1 item from RAM?
+
+64 nanoseconds, of which 4 are from the CPU and 60 from the memory.
+
+```python
+cpu_tick_time = 1_000_000_000 / 1_000_000_000 # 1e9 ns divided by 1 GHz aka 1e9 Hz
+mem_tick_time = 1_000_000_000 / 100_000_000 # 1e9 ns divided by 100 MHz aka 1e8 Hz
+cpu_time = 4 * cpu_tick_time # 4 ticks of 1 ns (1 GHz) = 4 ns
+mem_time = 6 * mem_tick_time # 10 ticks of 10 ns (100 MHz) = 100 ns
+
+cpu_time + mem_time = 64 # ns total time
+```
+
+### What is the mean acces time and cache speed-up when we have a hit ratio of 0.9?
+
+Mean access time = 7.3 ns
+Speedup = 8.767 ns
+
+```python
+# Mean access time
+# 10% memory access which takes 64 ns
+# 90% cache access which takes 1 ns
+tm = 64 * 0.1 + 1 * 0.9
+# tm = 7.3 ns
+
+# Cache speed-up
+speedup = 64 / tm
+# speedup = 8.767 ns
+```
+
+### Lets introduce the L2 cache
+
+Given the following:
+
+- L1 cache hit ratio = 0.25
+- L2 cache access time = 2 ticks
+- L2 cache speed = 50% CPU clock = 500 MHz
+- L2 cache hit ratio = 0.4
+
+#### What is the access time to the L2 cache?
+
+Mean access time for the L2 cache = xxx
+
+// TODO: This seems wrong, fact check the course notes!
+
+**Course note**
+
+T(L2 cache) = 1T (send L1→ L2) + 1T (look-up) + 1T (L1 receives update from L2)
+= 3T = 3 \* 10-9 sec = 3 ns
