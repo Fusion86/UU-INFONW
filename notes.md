@@ -157,6 +157,26 @@ A page table maps the page number code (encoded in the page number segment of th
 **Course note**
 Page table directory: a list of all available pages in the system, together with their access rights (read/write), protection etc.
 
+## Memory - Virtual Memory
+
+The Memory Controller Hub (Northbridge) translates the virtual address into a physical address.
+
+The pages of a program are stored in the Paged Memory Table (PMT). Each program has its own PMT.
+
+// TODO: Which steps are required to access a memory page, and which steps are required to load and replace a memory page.
+
+### Swapping advantages and disadvantages
+
+Pros
+
+- Have more memory available than is physically present on the computer
+
+Cons
+
+- Swapping is very slow, as the 'extra' memory is actually just borrowed HDD space. And because HDDs are slower than RAM (a lot slower) this is also very noticeable in the program (e.g. it might appear to freeze).
+
+Note: nowadays you almost never run into a scenario where a pc would need to actually use it's swap space.
+
 ## CPU – Layout
 
 ### What's the purpose of the control unit
@@ -344,3 +364,72 @@ Mean access time for the L2 cache = xxx
 
 T(L2 cache) = 1T (send L1→ L2) + 1T (look-up) + 1T (L1 receives update from L2)
 = 3T = 3 \* 10-9 sec = 3 ns
+
+## Compiling
+
+### What does a compiler do
+
+In a ELI5 sense, we don't differentiate between a compiler, linker and assembler here.
+
+- translating code from a high-level language to low level assembler code.
+  C# is given as an example, but technically it compiles to MSIL byte code and not native assembler code (though you don't need to know this).
+- apply code optimization
+- resolve external code references from libraries
+- generate a runnable binary executable
+- create code and data segments in the program/executable
+
+## Operating Systems
+
+### What is batch processing?
+
+// TODO: Fill this in, basically it just chains programs together and runs them sequentially. This is very simple but also inefficient and not interactive.
+
+## File Systems
+
+**Block**
+
+A block is the smallest physically addressable unit of an external storage system.
+
+**Sector**
+
+a set of blocks of varying capacity that are at the same angle of a disk (physically) that cannot be accessed simultaneously (physically). Logically, sectors are sets of clusters that are so far apart from one another that they cannot be accessed (i.e. read or written) in 1 instruction
+
+**Cluster**
+
+A cluster (sometimes also called allocation unit or block) is a unit of disk space allocation for files and directories. To reduce the overhead of managing on-disk data structures, the filesystem does not allocate individual disk sectors by default, but contiguous groups of sectors, called clusters.
+
+On a disk that uses 512-byte sectors, a 512-byte cluster contains one sector, whereas a 4-kibibyte (KiB) cluster contains eight sectors. (Wikipedia)
+
+![](https://i.imgur.com/JAnhpw4.png)
+
+## Large vs small clusters
+
+### Small clusters
+
+Pros
+
+- Efficient use of available physical storage space
+
+Cons
+
+- Slow file access
+- Lots of fragmentation
+
+## Large clusters
+
+Pros
+
+- Fast file access because files are spread over less clusters
+- Less fragmentation
+
+Cons
+
+- Wastes space (e.g. a 1 byte file will always use the full cluster)
+- Defragmentation is slower (not sure if true, but the slides say so)
+
+Example of a file which is smaller than the cluster size, but still fills the whole cluster.  
+![Cluster size](https://i.imgur.com/iO6MWvb.png)
+
+## Compute parity sum(s)
+
+// TODO:
