@@ -415,7 +415,7 @@ Cons
 - Slow file access
 - Lots of fragmentation
 
-## Large clusters
+### Large clusters
 
 Pros
 
@@ -430,6 +430,50 @@ Cons
 Example of a file which is smaller than the cluster size, but still fills the whole cluster.  
 ![Cluster size](https://i.imgur.com/iO6MWvb.png)
 
-## Compute parity sum(s)
+### Compute parity sum(s)
 
 // TODO:
+
+## Process Management
+
+### Know this
+
+![](https://i.imgur.com/zuVgtXE.png)
+
+### Scheduling Algorithms
+
+- Shortest Job Next
+- Priority Queue
+- Round Robin
+- Last-Come First-Serve (difficult to realize in runtime)
+- Longest Job First
+
+### The Process Scheduler
+
+![](https://i.imgur.com/proOA3L.png)
+
+### Multi tasking/threading/processing
+
+Multiprocessing – A computer using more than one CPU at a time.
+Multitasking – Tasks sharing a common resource (like 1 CPU).
+Multithreading is an extension of multitasking.
+
+### Scheduler Metrics
+
+**CPU Utilization**
+The percentage of time that the CPU is busy – not idle.
+
+**Throughput**
+The number of processes that are completed per time unit.
+
+**Waiting time**
+The sum of the time spent in the ready queue during the life of the process. Time blocked, waiting for I/O, is not part of the waiting time.
+
+**service time**
+The amount of CPU time that a process will need before it either finishes or voluntarily exits the CPU, such as to wait for input / output.
+
+**Turnaround time for a process**
+The amount of time between the time a process arrives in the ready state to the time it exits the running state for the last time
+
+**response time**
+The time from first submission of the process until the first running.
