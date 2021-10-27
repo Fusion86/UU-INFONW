@@ -2,9 +2,8 @@
 
 ## TODO
 
-- Circuitswitching
-- Packetswitching
-- FDM/TDM
+- CRC32 Checksum (very important!)
+- Dijkstra, MST
 - Layers (NOT the OSI layer, we only use 5 layers)
 - Stop-and-wait vs Pipelining/Sliding-window
 
